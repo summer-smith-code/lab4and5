@@ -1,12 +1,5 @@
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
-using UnityEngine.Rendering.UI;
-using UnityEngine.SocialPlatforms.Impl;
-using UnityEngine.TextCore.Text;
 
 public class Lab4 : MonoBehaviour
 {
@@ -15,10 +8,12 @@ public class Lab4 : MonoBehaviour
     public int characterLevel;
     public int conScore;
     public string characterRace;
-    public Boolean toughFeat;
-    public Boolean stoutFeat;
+    public bool toughFeat;
+    public bool stoutFeat;
+    
     // true if averaged, false if rolled
-    public Boolean diceAveraged;
+    public bool diceAveraged;
+    private string rollType;
     public string characterClass;
 
     private int totalHP;
@@ -37,8 +32,60 @@ public class Lab4 : MonoBehaviour
 
     public int calculateHP()
     {
+        int hitPoints;
+        
+        if (diceAveraged)
+        {
+            rollType = "averaged";
+            int averagedRoll; // This is turned into an int so that it can be rounded up.
+            switch (characterClasses[characterClass])
+            {
+                case 6:
+                    averagedRoll = 4;
+                    break;
+                case 8:
+                    averagedRoll = 5;
+                    break;
+                case 10:
+                    averagedRoll = 6;
+                    break;
+                case 12:
+                    averagedRoll = 7;
+                    break;
+                default: // This shouldn't be possible, but it has been added in for the sake of debugging.
+                    averagedRoll = 0; 
+                    break;
+            }
 
-        return totalHP;
+            if (toughFeat && stoutFeat)
+            {
+                hitPoints = (characterLevel * averagedRoll) + (characterLevel * conScores[conScore]) +
+                            (characterLevel * characterRaces[characterRace]) + (characterLevel * 3);
+            }
+            else if (toughFeat)
+            {
+                hitPoints = (characterLevel * averagedRoll) + (characterLevel * conScores[conScore]) + 
+                            (characterLevel * characterRaces[characterRace]) + (characterLevel * 2);
+            }
+            else if (stoutFeat)
+            {
+                hitPoints = (characterLevel * averagedRoll) + (characterLevel * conScores[conScore]) + 
+                            (characterLevel * characterRaces[characterRace]) + (characterLevel * 1);
+            }
+            else
+            {
+                hitPoints = (characterLevel * averagedRoll) + (characterLevel * conScores[conScore]) + 
+                            (characterLevel * characterRaces[characterRace]);
+            }
+        }
+        else
+        {
+            rollType = "rolled";
+            int randomRoll = Random.Range(1, characterClasses[characterClass] + 1);
+            hitPoints = (characterLevel * randomRoll) + (characterLevel * conScores[conScore]) + (characterLevel * characterRaces[characterRace]);
+        }
+        
+        return hitPoints;
     }
     public void checkValues()
     {
@@ -50,12 +97,12 @@ public class Lab4 : MonoBehaviour
         {
             Debug.Log("Constitution score must be between 1 and 30.");
         }
-            if (characterRaces.ContainsKey(characterRace) == false)
+        if (characterRaces.ContainsKey(characterRace) == false)
         {
             Debug.Log("The race you chose is not applicable. Setting to Human.");
             characterRace = "Human";
         }
-            if (characterClasses.ContainsKey(characterClass) == false)
+        if (characterClasses.ContainsKey(characterClass) == false)
         {
             Debug.Log("The class you chose is not applicable. Setting to Fighter.");
             characterClass = "Fighter";
@@ -71,16 +118,6 @@ public class Lab4 : MonoBehaviour
             if (i % 2 == 0) start++;
             conScores.Add(i, start);
         }
-        /* 
-        foreach (var kvp in conScores)
-        {
-            if (kvp.Key == conScore)
-            {
-                // Debug.LogFormat("Constitution Score: {0} \n Modifier: {1}", kvp.Key, kvp.Value);
-            }
-            Debug.LogFormat("Constitution Score: {0} \n Modifier: {1}", kvp.Key, kvp.Value);
-        }
-        */
     
         // Set up races and modifiers
         characterRaces.Add("Aasmar", 0);
@@ -114,21 +151,28 @@ public class Lab4 : MonoBehaviour
     {
         if (toughFeat && stoutFeat)
         {
-            Debug.LogFormat("My character " +characterName + " is a level " +characterLevel + " " +characterClass + " with a CON score of " +conScore + " and is of " +characterRace + " race and has Tough and Stout feats.I want the HP " +rollType);
+            Debug.LogFormat("My character " +characterName + " is a level " +characterLevel + " " +characterClass + 
+                            " with a CON score of " +conScore + " and is of the " +characterRace + 
+                            " race and has the Tough and Stout feats. I want the HP " + rollType + ".");
         }
         else if (toughFeat)
         {
-            Debug.Log("My character " +characterName + " is a level " +characterLevel + " " +characterClass + " with a CON score of " +conScore + " and is of " +characterRace + " race and has Tough feat.I want the HP " +rollType);
+            Debug.Log("My character " +characterName + " is a level " +characterLevel + " " +characterClass + 
+                      " with a CON score of " +conScore + " and is of the " +characterRace + 
+                      " race and has the Tough feat. I want the HP " + rollType + ".");
         }
         else if (stoutFeat)
         {
-            Debug.Log("My character " +characterName + " is a level " +characterLevel + " " +characterClass + " with a CON score of " +conScore + " and is of " +characterRace + " race and has Stout feat.I want the HP " +rollType);
+            Debug.Log("My character " +characterName + " is a level " +characterLevel + " " +characterClass + 
+                      " with a CON score of " +conScore + " and is of the " +characterRace + 
+                      " race and has the Stout feat. I want the HP " + rollType + ".");
         }
         else
         {
-            Debug.Log("My character " +characterName + " is a level " +characterLevel + " " +characterClass + " with a CON score of " +conScore + " and is of " +characterRace + " race and has no feats.I want the HP " +rollType);
+            Debug.Log("My character " +characterName + " is a level " +characterLevel + " " +characterClass + 
+                      " with a CON score of " +conScore + " and is of the " +characterRace + 
+                      " race and has no feats. I want the HP " + rollType + ".");
         }
         Debug.Log("Total HP: " + totalHP);
-
     }
 }
