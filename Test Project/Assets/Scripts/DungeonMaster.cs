@@ -11,7 +11,7 @@ public class DungeonMaster : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Calls setUp() to define all dictionaries.
         setUp();
