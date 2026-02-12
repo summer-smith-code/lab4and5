@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DungeonMaster : MonoBehaviour
 {
+    // Dictionaries that will store all valid character information.
     public Dictionary<int, int> conScores = new Dictionary<int, int>();
     public Dictionary<string, int> characterRaces = new Dictionary<string, int>();
     public Dictionary<string, int> characterClasses = new Dictionary<string, int>();
@@ -12,9 +13,11 @@ public class DungeonMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Calls setUp() to define all dictionaries.
         setUp();
     }
 
+    // Defines all values for the character info dictionaries.
     public void setUp()
     {
         // Set up constitution scores and modifiers
@@ -53,8 +56,10 @@ public class DungeonMaster : MonoBehaviour
         characterClasses.Add("Warlock", 8);
     }
 
+    // Is called by Character.cs to check the character's values and ensure they are valid.
     public void checkValues(int charLevel, int conScore, String charRace, String charClass)
     {
+        // If the character has an invalid race and class, it will be set to a default value.
 
         if (charLevel < 1 || charLevel > 20)
         {
@@ -74,6 +79,5 @@ public class DungeonMaster : MonoBehaviour
             Debug.Log("The class you chose is not applicable. Setting to Fighter.");
             charClass = "Fighter";
         }
-
     }
 }
