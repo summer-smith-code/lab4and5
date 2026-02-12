@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class DungeonMaster : MonoBehaviour
 {
-    public GameObject character;
-
     public Dictionary<int, int> conScores = new Dictionary<int, int>();
     public Dictionary<string, int> characterRaces = new Dictionary<string, int>();
     public Dictionary<string, int> characterClasses = new Dictionary<string, int>();
