@@ -15,35 +15,9 @@ public class DungeonMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        setUp();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void checkValues()
-    {
-        if (characterLevel < 1 || characterLevel > 20)
-        {
-            Debug.Log("Character level must be between 1 and 20.");
-        }
-        if (conScore < 1 || conScore > 30)
-        {
-            Debug.Log("Constitution score must be between 1 and 30.");
-        }
-        if (characterRaces.ContainsKey(characterRace) == false)
-        {
-            Debug.Log("The race you chose is not applicable. Setting to Human.");
-            characterRace = "Human";
-        }
-        if (characterClasses.ContainsKey(characterClass) == false)
-        {
-            Debug.Log("The class you chose is not applicable. Setting to Fighter.");
-            characterClass = "Fighter";
-        }
-
-    }
     public void setUp()
     {
         // Set up constitution scores and modifiers
@@ -80,5 +54,29 @@ public class DungeonMaster : MonoBehaviour
         characterClasses.Add("Sorcerer", 6);
         characterClasses.Add("Wizard", 6);
         characterClasses.Add("Warlock", 8);
+    }
+
+    public void checkValues(int charLevel, int conScore, String charRace, String charClass)
+    {
+
+        if (charLevel < 1 || charLevel > 20)
+        {
+            Debug.Log("Character level must be between 1 and 20.");
+        }
+        if (conScore < 1 || conScore > 30)
+        {
+            Debug.Log("Constitution score must be between 1 and 30.");
+        }
+        if (characterRaces.ContainsKey(charRace) == false)
+        {
+            Debug.Log("The race you chose is not applicable. Setting to Human.");
+            charRace = "Human";
+        }
+        if (characterClasses.ContainsKey(charClass) == false)
+        {
+            Debug.Log("The class you chose is not applicable. Setting to Fighter.");
+            charClass = "Fighter";
+        }
+
     }
 }
