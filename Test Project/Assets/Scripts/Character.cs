@@ -28,21 +28,12 @@ public class Character : DungeonMaster
         this.stoutFeat = sfeat;
         this.diceAveraged = dice;
     }
-
-    // Start is called before the first frame update
-    void Start()
+    public void work(Character character)
     {
-        Character character = new Character("Test Character", 1, 10, "Dwarf", "Fighter", true, true, true);
+        character.setUp();
         character.checkValues(characterLevel, conScore, characterRace, characterClass);
         character.totalHP = calculateHP();
         output(character);
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     public int diceRoll()
     {
