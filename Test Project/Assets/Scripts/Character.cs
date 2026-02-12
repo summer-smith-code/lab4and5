@@ -12,10 +12,12 @@ public class Character : DungeonMaster
     public string characterClass;
     public bool toughFeat;
     public bool stoutFeat;
+
     private string rollType;
     private int totalHP;
+    private int rollHP;
 
-    public Character(string name, int level, int con, string race, string cclass, bool tfeat, bool sfeat)
+    public Character(string name, int level, int con, string race, string cclass, bool tfeat, bool sfeat, bool dice)
     {
         this.characterName = name;
         this.characterLevel = level;
@@ -24,17 +26,18 @@ public class Character : DungeonMaster
         this.characterRace = race;
         this.toughFeat = tfeat;
         this.stoutFeat = sfeat;
+        this.diceAveraged = dice;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Character character = new Character("Test Character", 1, 10, "Dwarf", "Fighter", true, true);
+        Character character = new Character("Test Character", 1, 10, "Dwarf", "Fighter", true, true, true);
         Instantiate(character);
         character.setUp();
         character.checkValues(characterLevel, conScore, characterRace, characterClass);
         character.totalHP = calculateHP();
-            output(character);
+        output(character);
 
     }
 
@@ -67,11 +70,15 @@ public class Character : DungeonMaster
                     averagedRoll = 0;
                     break;
             }
-            return averagedRoll;
+            return averagedRoll*characterLevel;
         } else
         {
             rollType = "rolled";
-            int randomRoll = Random.Range(1, characterClasses[characterClass] + 1);
+            int randomRoll = 0;
+            for (int i = 0; i < characterLevel - 1; i++)
+            {
+                randomRoll += Random.Range(1, characterClasses[characterClass] + 1);
+            }
             return randomRoll;
         }
 
@@ -80,57 +87,27 @@ public class Character : DungeonMaster
     {
         int hitPoints;
 
-        if (diceAveraged)
-        {
-            rollType = "averaged";
-            int averagedRoll; // This is turned into an int so that it can be rounded up.
-            switch (characterClasses[characterClass])
-            {
-                case 6:
-                    averagedRoll = 4;
-                    break;
-                case 8:
-                    averagedRoll = 5;
-                    break;
-                case 10:
-                    averagedRoll = 6;
-                    break;
-                case 12:
-                    averagedRoll = 7;
-                    break;
-                default: // This shouldn't be possible, but it has been added in for the sake of debugging.
-                    averagedRoll = 0;
-                    break;
-            }
-
+        rollHP = diceRoll();
             if (toughFeat && stoutFeat)
             {
-                hitPoints = (characterLevel * averagedRoll) + (characterLevel * conScores[conScore]) +
+                hitPoints = (rollHP) + (characterLevel * conScores[conScore]) +
                             (characterLevel * characterRaces[characterRace]) + (characterLevel * 3);
             }
             else if (toughFeat)
             {
-                hitPoints = (characterLevel * averagedRoll) + (characterLevel * conScores[conScore]) +
+                hitPoints = (rollHP) + (characterLevel * conScores[conScore]) +
                             (characterLevel * characterRaces[characterRace]) + (characterLevel * 2);
             }
             else if (stoutFeat)
             {
-                hitPoints = (characterLevel * averagedRoll) + (characterLevel * conScores[conScore]) +
+                hitPoints = (rollHP) + (characterLevel * conScores[conScore]) +
                             (characterLevel * characterRaces[characterRace]) + (characterLevel * 1);
             }
             else
             {
-                hitPoints = (characterLevel * averagedRoll) + (characterLevel * conScores[conScore]) +
+                hitPoints = (rollHP) + (characterLevel * conScores[conScore]) +
                             (characterLevel * characterRaces[characterRace]);
             }
-        }
-        else
-        {
-            rollType = "rolled";
-            int randomRoll = Random.Range(1, characterClasses[characterClass] + 1);
-            hitPoints = (characterLevel * randomRoll) + (characterLevel * conScores[conScore]) + (characterLevel * characterRaces[characterRace]);
-        }
-
         return hitPoints;
     }
 
