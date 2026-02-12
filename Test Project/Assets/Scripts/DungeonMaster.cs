@@ -5,16 +5,11 @@ using UnityEngine;
 
 public class DungeonMaster : MonoBehaviour
 {
-    public string characterName;
-    public int characterLevel;
-    public int conScore;
-    public string characterRace;
-    public bool toughFeat;
-    public bool stoutFeat;
+    public GameObject character;
 
-    private Dictionary<int, int> conScores = new Dictionary<int, int>();
-    private Dictionary<string, int> characterRaces = new Dictionary<string, int>();
-    private Dictionary<string, int> characterClasses = new Dictionary<string, int>();
+    public Dictionary<int, int> conScores = new Dictionary<int, int>();
+    public Dictionary<string, int> characterRaces = new Dictionary<string, int>();
+    public Dictionary<string, int> characterClasses = new Dictionary<string, int>();
 
 
     // Start is called before the first frame update
