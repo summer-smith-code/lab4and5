@@ -31,7 +31,9 @@ public class Character : DungeonMaster
     {
         Character character = new Character("Test Character", 1, 10, "Dwarf", "Fighter", true, true);
         Instantiate(character);
-            totalHP = calculateHP();
+        character.setUp();
+        character.checkValues(characterLevel, conScore, characterRace, characterClass);
+        character.totalHP = calculateHP();
             output(character);
 
     }
@@ -41,7 +43,36 @@ public class Character : DungeonMaster
     {
         
     }
+    public int diceRoll()
+    {
+        if (diceAveraged)
+        {
+            rollType = "averaged";
+            int averagedRoll; // This is turned into an int so that it can be rounded up.
+            switch (characterClasses[characterClass])
+            {
+                case 6:
+                    averagedRoll = 4;
+                    break;
+                case 8:
+                    averagedRoll = 5;
+                    break;
+                case 10:
+                    averagedRoll = 6;
+                    break;
+                case 12:
+                    averagedRoll = 7;
+                    break;
+                default: // This shouldn't be possible, but it has been added in for the sake of debugging.
+                    averagedRoll = 0;
+                    break;
+            }
+            return averagedRoll;
+        } else
+        {
 
+        }
+    }
     public int calculateHP()
     {
         int hitPoints;
