@@ -70,8 +70,11 @@ public class Character : DungeonMaster
             return averagedRoll;
         } else
         {
-
+            rollType = "rolled";
+            int randomRoll = Random.Range(1, characterClasses[characterClass] + 1);
+            return randomRoll;
         }
+
     }
     public int calculateHP()
     {
